@@ -105,6 +105,18 @@ Or as perl module
 
 L<MojoX::I18N::Lexemes>
 
+=head1 SUPPORT
+
+=head2 IRC
+
+    #ru.pm on irc.perl.org
+    
+=head1 DEVELOPMENT
+
+=head2 Repository
+
+    http://github.com/und3f/mojoliciousx-lexicon
+
 =head1 COPYRIGHT
 
 Copyright (C) 2011, Sergey Zasenko
