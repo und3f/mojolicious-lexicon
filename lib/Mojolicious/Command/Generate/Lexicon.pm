@@ -1,14 +1,14 @@
-package Mojolicious::Command::Generate::Lexemes;
+package Mojolicious::Command::Generate::Lexicon;
 use Mojo::Base 'Mojo::Command';
 
 use MojoX::I18N::Lexemes;
 use File::Find;
 
 has description => <<'EOF';
-Generate lexemes file from templates.
+Generate lexicon file from templates.
 EOF
 has usage => <<"EOF";
-usage: $0 generate lexemes [language] [templates]
+usage: $0 generate lexicon [language] [templates]
 EOF
 
 sub run {
@@ -40,7 +40,7 @@ sub run {
 
     my $l = MojoX::I18N::Lexemes->new(renderer => $self->renderer);
 
-    my %lexemes = ();
+    my %lexicon = ();
 
     foreach my $file (@templates) {
         open F, $file or die "Unable to open $file: $!";
@@ -51,12 +51,12 @@ sub run {
         my $parsed_lexemes = $l->parse($t);
 
         # add to all lexemes
-        $lexemes{$_} = '' foreach (@$parsed_lexemes);
+        $lexicon{$_} = '' foreach (@$parsed_lexemes);
     }
 
     # Output lexem
     $self->render_to_file('package', $lexem_file, $app_class, $language,
-        \%lexemes);
+        \%lexicon);
 }
 
 1;
@@ -87,14 +87,19 @@ __END__
 
 =head1 NAME
 
-MojoliciousX::Command::Generate::Lexemes - Generate Lexemes Command
+MojoliciousX::Command::Generate::Lexicon - Generate Lexicon Command
 
 =head1 SYNOPSIS
 
-    use Mojolicious::Command::Generate::Lexemes;
+    $ mojolicious generate lexicon
 
-    my $l = Mojolicious::Command::Generate::Lexemes->new;
+Or as perl module
+
+    use Mojolicious::Command::Generate::Lexicon;
+
+    my $l = Mojolicious::Command::Generate::Lexicon->new;
     $inflate->run(@files);
+
 
 =head1 SEE ALSO
 
