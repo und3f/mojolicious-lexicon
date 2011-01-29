@@ -1,6 +1,8 @@
 =pod
 
-L<Mojolicious> lexicon generator for L<Mojolicious::Plugins::I18N>
+L<Mojolicious> lexicon generator for L<Mojolicious::Plugins::I18N>.
+It search for I18N lexemes in L<Mojolicious> template and generates
+lexicon file.
 
 =head2 Usage example
 
