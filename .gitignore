@@ -10,3 +10,4 @@ META.yml
 MANIFEST*
 !MANIFEST.SKIP
 pm_to_blib
+t/lib/Lexemes/I18N/Skeleton.pm

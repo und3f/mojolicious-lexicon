@@ -2,22 +2,17 @@ package Mojolicious::Command::Generate::Lexemes;
 use Mojo::Base 'Mojo::Command';
 
 use MojoX::I18N::Lexemes;
-use Carp 'croak';
+use File::Find;
 
 has description => <<'EOF';
 Generate lexemes file from templates.
 EOF
 has usage => <<"EOF";
-usage: $0 generate lexemes <language> <templates>
+usage: $0 generate lexemes [language] [templates]
 EOF
 
 sub run {
     my ($self, $language, @templates) = @_;
-
-    unless ($language && @templates) {
-        print $self->usage;
-        return;
-    }
 
     my $s   = Mojo::Server->new;
     my $app = $s->app;
@@ -25,9 +20,20 @@ sub run {
     my $app_class = $s->app_class;
     $app_class =~ s!::!/!g;
 
+    $language ||= 'Skeleton';
+
+    my $handler = $app->renderer->default_handler;
+    unless (@templates) {
+        # Find all templates of project
+        find(sub {
+            push @templates, $File::Find::name if (/\.$handler/);
+        }, $app->renderer->root);
+    }
+
+
     my $lexem_file = $app->home->rel_file("lib/$app_class/I18N/$language.pm");
 
-    if (-e $lexem_file) {
+    if ($language ne 'Skeleton' && -e $lexem_file) {
         print "Lexem file \"$lexem_file\" already exists\n";
         return;
     }

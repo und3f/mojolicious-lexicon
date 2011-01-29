@@ -4,7 +4,7 @@ L<Mojolicious> lexicon generator for L<Mojolicious::Plugins::I18N>
 
 =head2 Usage example
 
-./script/myapp generate lexicon templates/*/*
+./script/myapp generate lexicon
 
 =head2 COPYRIGHT
 
