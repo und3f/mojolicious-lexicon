@@ -25,3 +25,5 @@ is_deeply eval(
     'use Lexemes::I18N::Skeleton; \%Lexemes::I18N::Skeleton::Lexicon'),
   {'lexemes' => '', "hard\ntest" => ''},
   'correct lexemes';
+
+unlink "$FindBin::Bin/lib/Lexemes/I18N/Skeleton.pm";

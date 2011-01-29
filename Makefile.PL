@@ -8,7 +8,7 @@ use warnings;
 use ExtUtils::MakeMaker;
 
 WriteMakefile(
-    NAME         => 'mojoliciousx-lexemes',
+    NAME         => 'mojolicious-lexicon',
     VERSION_FROM => 'lib/MojoX/I18N/Lexemes.pm',
     AUTHOR       => 'Sergey Zasenko <undef@cpan.org>',
     PREREQ_PM => {
