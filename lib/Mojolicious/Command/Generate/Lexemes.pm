@@ -66,7 +66,12 @@ use Mojo::Base '<%= $app_class %>::I18N';
 
 our %Lexicon = (
 % foreach my $lexem (keys %$lexicon) {
+    % $lexem=~s/'/\\'/g;
+    % unless ($lexem=~s/\n/\\n/g) {
     '<%= $lexem %>' => '',
+    % } else {
+    "<%= $lexem %>" => '',
+    % };
 % }
 );
 
