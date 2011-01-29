@@ -1,0 +1,38 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+use Test::More tests => 6;
+
+BEGIN {use_ok 'MojoX::I18N::Lexemes'};
+
+my $l = new_ok 'MojoX::I18N::Lexemes';
+
+is_deeply
+    $l->parse(q|Simple <%=l 'lexem' %>|),
+    ['lexem'],
+    'simple lexem';
+
+is_deeply
+    $l->parse(q|Escaped <%==l 'lexem' %>|),
+    ['lexem'],
+    'escaped lexem';
+
+is_deeply
+    $l->parse(qq|Multiline <%==l 'lexem\nlexem\nlexem' %>|),
+    ["lexem\nlexem\nlexem"],
+    'multiline lexem';
+
+my $template = <<TEMPLATE
+Just lexems <%=l 'lexem1' %> <%==l 'lexem2' %>
+Multiline <%==l 'Hello
+World' %>
+Another <%=l 'lexem3' %>
+TEMPLATE
+;
+
+is_deeply
+    $l->parse($template),
+    ['lexem1', 'lexem2', "Hello\nWorld", 'lexem3'],
+    'complex template';
