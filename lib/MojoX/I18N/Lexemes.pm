@@ -36,6 +36,7 @@ sub parse {
                 }
             }
             elsif (($type eq 'expr' or $type eq 'escp')
+                && $value
                 && substr($value, 0, 2) eq 'l ')
             {
                 $args = substr $value, 2;
