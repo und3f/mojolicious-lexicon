@@ -3,14 +3,14 @@ package MojoX::I18N::Lexemes;
 use strict;
 use warnings;
 
-use Mojo::Base -base;
+use base 'Mojo::Base';
 
 use Mojo::Template;
 use Mojo::Server;
 
-our $VERSION = 0.9;
+our $VERSION = 0.91;
 
-has renderer => sub { Mojo::Template->new };
+__PACKAGE__->attr(renderer => sub { Mojo::Template->new });
 
 sub parse {
     my ($self, $template) = @_;

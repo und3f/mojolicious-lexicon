@@ -1,13 +1,13 @@
 package Mojolicious::Command::Generate::Lexicon;
-use Mojo::Base 'Mojo::Command';
+use base 'Mojo::Command';
 
 use MojoX::I18N::Lexemes;
 use File::Find;
 
-has description => <<'EOF';
+__PACKAGE__->attr(description => <<'EOF');
 Generate lexicon file from templates.
 EOF
-has usage => <<"EOF";
+__PACKAGE__->attr(usage => <<"EOF");
 usage: $0 generate lexicon [language] [templates]
 EOF
 
@@ -65,7 +65,7 @@ __DATA__
 @@ package
 % my ($app_class, $language, $lexicon) = @_;
 package <%= $app_class %>::I18N::<%= $language %>;
-use Mojo::Base '<%= $app_class %>::I18N';
+use base '<%= $app_class %>::I18N';
 
 # Uncoment to use non-latin symbols
 # use utf8;

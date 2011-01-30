@@ -3,7 +3,7 @@ package Lexemes;
 use strict;
 use warnings;
 
-use Mojo::Base 'Mojolicious';
+use base 'Mojolicious';
 
 sub startup {
 
