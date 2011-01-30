@@ -71,8 +71,10 @@ L<MojoX::I18N::Lexemes> - parse lexemes from Mojolicious template
 
 =head1 SYNOPSIS
 
+    use MojoX::I18N::Lexemes;
+
     my $l = MojoX::I18N::Lexemes->new;
-    $l->parse(q|Simple <%=l 'lexem' %>|),
+    my $lexemes = $l->parse(q|Simple <%=l 'lexem' %>|);
 
 =head1 DESCRIPTION
 
