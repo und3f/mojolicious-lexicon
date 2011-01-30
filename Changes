@@ -1,7 +1,8 @@
 0.991 2011-01-30 00:00:00
-        - Fixed work with Mojolicious 1.0
-        - Fixed typos
+        - Fixed work with Mojolicious 1.0.
+        - Fixed typos.
         - Mojolicious::Command::Generator::Lexicon has separated version.
+        - Added configurable helper to MojoX::I18N::Lexemes. 
 
 0.9   2011-01-29 00:00:00
-        - First release
+        - First release.

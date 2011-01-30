@@ -84,7 +84,6 @@ our %Lexicon = (
 );
 
 1;
-
 __END__
 
 =head1 NAME
@@ -93,14 +92,14 @@ Mojolicious::Command::Generate::Lexicon - Generate Lexicon Command
 
 =head1 SYNOPSIS
 
-    $ mojolicious generate lexicon
+    $ ./script/my_mojolicious_app generate lexicon
 
 Or as perl module
 
     use Mojolicious::Command::Generate::Lexicon;
 
     my $l = Mojolicious::Command::Generate::Lexicon->new;
-    $inflate->run(@files);
+    $inflate->run($language, @files);
 
 
 =head1 SEE ALSO
@@ -119,6 +118,10 @@ L<MojoX::I18N::Lexemes>
 
     http://github.com/und3f/mojolicious-lexicon
 
+=head1 AUTHOR
+
+Sergey Zasenko, C<undef@cpan.org>.
+
 =head1 COPYRIGHT
 
 Copyright (C) 2011, Sergey Zasenko
@@ -127,5 +130,3 @@ This program is free software, you can redistribute it and/or modify it
 under the terms of the Artistic License version 2.0.
 
 =cut
-
-1;

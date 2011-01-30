@@ -8,9 +8,10 @@ use base 'Mojo::Base';
 use Mojo::Template;
 use Mojo::Server;
 
-our $VERSION = 0.91;
+our $VERSION = 0.92;
 
 __PACKAGE__->attr(renderer => sub { Mojo::Template->new });
+__PACKAGE__->attr(helper   => sub {'l'});
 
 sub parse {
     my ($self, $template) = @_;
@@ -37,9 +38,10 @@ sub parse {
             }
             elsif (($type eq 'expr' or $type eq 'escp')
                 && $value
-                && substr($value, 0, 2) eq 'l ')
+                && substr($value, 0, length($self->helper) + 1) eq
+                $self->helper . ' ')
             {
-                $args = substr $value, 2;
+                $args = substr $value, length($self->helper) + 1;
 
                 unless (($line->[$j + 2] || '') eq 'text') {
 
@@ -60,17 +62,68 @@ sub parse {
     return $lexemes;
 }
 
+1;
+__END__
+
 =head1 NAME
 
-TODO
+L<MojoX::I18N::Lexemes> - parse lexemes from Mojolicious template
 
 =head1 SYNOPSIS
 
-TODO
+    my $l = MojoX::I18N::Lexemes->new;
+    $l->parse(q|Simple <%=l 'lexem' %>|),
 
 =head1 DESCRIPTION
 
-TOOD
+L<MojoX::I18N::Lexemes> parses internatinalized lexemes from Mojolicious
+templates.
+
+=head1 ATTRIBUTES
+
+L<MojoX::I18N::Lexemes> implements the following attributes.
+
+=head2 C<helper>
+
+    my $helper = $l->helper;
+    $l         = $l->helper('l');
+
+I18N template helper, defaults to 'l'.
+
+=head2 C<renderer>
+
+    my $renderer = $l->renderer;
+    $l           = $l->renderer(Mojo::Template->new);
+
+Template object to use for parsing operations, by default a L<Mojo::Template>
+object will be used;
+
+=head1 METHODS
+
+L<MojoX::I18N::Lexemes> inherits all methods from L<Mojo::Base> and
+implements the following ones.
+
+=head2 C<parse>
+
+    my $lexemes = $l->parse($template);
+
+Parses template and returns arrayref of found lexemes.
+
+=head1 SUPPORT
+
+=head2 IRC
+
+    #ru.pm on irc.perl.org
+    
+=head1 DEVELOPMENT
+
+=head2 Repository
+
+    http://github.com/und3f/mojoliciousx-lexicon
+
+=head1 AUTHOR
+
+Sergey Zasenko, C<undef@cpan.org>.
 
 =head1 COPYRIGHT
 
@@ -81,4 +134,3 @@ under the terms of the Artistic License version 2.0.
 
 =cut
 
-1;

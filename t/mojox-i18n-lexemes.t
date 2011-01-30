@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 BEGIN {use_ok 'MojoX::I18N::Lexemes'};
 
@@ -36,3 +36,9 @@ is_deeply
     $l->parse($template),
     ['lexem1', 'lexem2', "Hello\nWorld", 'lexem3'],
     'complex template';
+
+$l->helper('translate');
+is_deeply
+    $l->parse(q|Can you <%==translate 'this' %>?|),
+    ['this'],
+    'other helper name';
