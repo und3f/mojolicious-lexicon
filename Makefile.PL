@@ -9,7 +9,7 @@ use ExtUtils::MakeMaker;
 
 WriteMakefile(
     NAME         => 'mojolicious-lexicon',
-    VERSION_FROM => 'lib/MojoX/I18N/Lexemes.pm',
+    VERSION_FROM => 'lib/Mojolicious/Command/Generate/Lexicon.pm',
     AUTHOR       => 'Sergey Zasenko <undef@cpan.org>',
     PREREQ_PM => {
         'Mojolicious' => '1.0',

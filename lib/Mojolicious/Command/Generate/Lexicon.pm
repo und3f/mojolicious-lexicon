@@ -11,6 +11,8 @@ __PACKAGE__->attr(usage => <<"EOF");
 usage: $0 generate lexicon [language] [templates]
 EOF
 
+our $VERSION = 0.991;
+
 sub run {
     my ($self, $language, @templates) = @_;
 
@@ -115,7 +117,7 @@ L<MojoX::I18N::Lexemes>
 
 =head2 Repository
 
-    http://github.com/und3f/mojoliciousx-lexicon
+    http://github.com/und3f/mojolicious-lexicon
 
 =head1 COPYRIGHT
 
