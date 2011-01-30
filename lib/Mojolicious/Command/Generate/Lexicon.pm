@@ -87,7 +87,7 @@ __END__
 
 =head1 NAME
 
-MojoliciousX::Command::Generate::Lexicon - Generate Lexicon Command
+Mojolicious::Command::Generate::Lexicon - Generate Lexicon Command
 
 =head1 SYNOPSIS
 
