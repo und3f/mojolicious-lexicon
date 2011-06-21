@@ -1,4 +1,8 @@
 package Mojolicious::Command::Generate::Lexicon;
+
+use strict;
+use warnings;
+
 use base 'Mojo::Command';
 
 use MojoX::I18N::Lexemes;
@@ -12,6 +16,7 @@ usage: $0 generate lexicon [language] [templates]
 EOF
 
 our $VERSION = 0.991;
+use Data::Dumper;
 
 sub run {
     my ($self, $language, @templates) = @_;
@@ -34,15 +39,19 @@ sub run {
 
 
     my $lexem_file = $app->home->rel_file("lib/$app_class/I18N/$language.pm");
+    my %oldlex = ();
 
     if ($language ne 'Skeleton' && -e $lexem_file) {
         print "Lexem file \"$lexem_file\" already exists\n";
-        return;
+        require "$app_class/I18N/$language.pm";
+        my $l =  '%' . $app_class . '::I18N::' . $language . '::Lexicon';
+        %oldlex = eval( $l );
+        %oldlex = () if( $@ );
     }
 
     my $l = MojoX::I18N::Lexemes->new(renderer => $self->renderer);
 
-    my %lexicon = ();
+    my %lexicon = %oldlex;
 
     foreach my $file (@templates) {
         open F, $file or die "Unable to open $file: $!";
