@@ -6,7 +6,7 @@ use base 'Lexemes::I18N';
 
 our %Lexicon = (
     'lexemes' => 'lexemas',
-    "hard\ntest" => "test\nduro",
+    "hard\ntest" => "prueba\ndifícil",
 );
 
 1;
