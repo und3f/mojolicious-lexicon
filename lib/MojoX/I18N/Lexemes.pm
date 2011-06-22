@@ -12,6 +12,7 @@ our $VERSION = 0.92;
 
 __PACKAGE__->attr(renderer => sub { Mojo::Template->new });
 __PACKAGE__->attr(helper   => sub {'l'});
+__PACKAGE__->attr(helper_re => sub { qr/l\s*(\([^\)]+\))/ }) ;
 
 sub parse {
     my ($self, $template) = @_;
@@ -48,6 +49,12 @@ sub parse {
                     $multiline = 1;
                 }
 
+            }
+            elsif (($type eq 'expr' or $type eq 'escp')
+                && $value
+                && $value =~ $self->helper_re )
+            {
+                $args = $1;
             }
 
             if ($args && !$multiline) {
