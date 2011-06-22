@@ -59,7 +59,7 @@ sub parse {
 
             if ($args && !$multiline) {
                 my $lexem = eval $args;
-                push @$lexemes, $lexem;
+                push @$lexemes, $lexem if $lexem;
 
                 $args = '';
             }
