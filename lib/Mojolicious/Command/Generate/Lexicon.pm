@@ -67,6 +67,7 @@ sub run {
         %oldlex = () if( $@ );
       } else {
         print "Lexem file \"$lexem_file\" already exists ... stop\n";
+        return;
       }
     }
 
