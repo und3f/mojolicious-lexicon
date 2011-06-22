@@ -30,6 +30,7 @@ sub run {
     my $app = $s->app;
     my $reset;
     my $save;
+    my $verbose;
 
     my $app_class = $s->app_class;
     $app_class =~ s!::!/!g;
@@ -41,6 +42,7 @@ sub run {
     my $result = GetOptions(
             "reset!" => \$reset,
             "save!" => \$save,
+            'verbose|v:1' => \$verbose,
             '<>' => sub{ push  @templates, $_ if $_ }
     );
 
@@ -81,10 +83,14 @@ sub run {
         close F;
 
         # get lexemes
+        print "Parsing $file \n" if $verbose;
         my $parsed_lexemes = $l->parse($t);
 
         # add to all lexemes
-        $lexicon{$_} =  '' foreach (grep{ !$lexicon{$_} } @$parsed_lexemes);
+        foreach (grep{ !exists $lexicon{$_} } @$parsed_lexemes){
+          $lexicon{$_} =  '' ;
+          print "New lexeme found => $_\n" if $verbose;
+        }
     }
 
     # Output lexem
