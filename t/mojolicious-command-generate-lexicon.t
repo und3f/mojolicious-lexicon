@@ -24,7 +24,7 @@ require_ok 'Lexemes::I18N::Skeleton';
 
 is_deeply eval(
     'use Lexemes::I18N::Skeleton; \%Lexemes::I18N::Skeleton::Lexicon'),
-  {'lexemes' => '', "hard\ntest" => ''},
+  {'lexemes' => '', "hard\ntest" => '', link_to => ''},
   'correct lexemes';
 
 unlink "$FindBin::Bin/lib/Lexemes/I18N/Skeleton.pm";
@@ -39,7 +39,7 @@ require_ok( "$FindBin::Bin/lib/Lexemes/I18N/es.pm" );
 
 is_deeply eval(
     'use Lexemes::I18N::es; \%Lexemes::I18N::es::Lexicon'),
-  {'lexemes' => '', "hard\ntest" => ''},
+  {'lexemes' => '', "hard\ntest" => '', link_to => ''},
   'correct lexemes';
 
 unlink "$FindBin::Bin/lib/Lexemes/I18N/es.pm";

@@ -26,7 +26,7 @@ require_ok( "$FindBin::Bin/lib/Lexemes/I18N/es.pm" );
 
 is_deeply eval(
     'use Lexemes::I18N::es; \%Lexemes::I18N::es::Lexicon'),
-  {'lexemes' => 'lexemas', "hard\ntest" => "prueba\ndifícil"},
+  {'lexemes' => 'lexemas', "hard\ntest" => "prueba\ndifícil", link_to => ''},
   'correct lexemes';
 
 unlink "$FindBin::Bin/lib/Lexemes/I18N/es.pm";
