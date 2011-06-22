@@ -12,22 +12,37 @@ __PACKAGE__->attr(description => <<'EOF');
 Generate lexicon file from templates.
 EOF
 __PACKAGE__->attr(usage => <<"EOF");
-usage: $0 generate lexicon [language] [templates]
+usage: $0 generate lexicon [language] [--save] [--reset] [templates]
+Options:
+  --reset   Reset lexicon values (default values)
+  --save    Save old lexicon values
 EOF
 
 our $VERSION = 0.991;
-use Data::Dumper;
+use Getopt::Long;
 
 sub run {
-    my ($self, $language, @templates) = @_;
+    my $self = shift;
+    my $language = shift;
 
+    my @templates;
     my $s   = Mojo::Server->new;
     my $app = $s->app;
+    my $reset;
+    my $save;
 
     my $app_class = $s->app_class;
     $app_class =~ s!::!/!g;
 
     $language ||= 'Skeleton';
+
+    local @ARGV = @_ if @_;
+
+    my $result = GetOptions(
+            "reset!" => \$reset,
+            "save!" => \$save,
+            '<>' => sub{ push  @templates, $_ if $_ }
+    );
 
     my $handler = $app->renderer->default_handler;
     unless (@templates) {
@@ -41,12 +56,18 @@ sub run {
     my $lexem_file = $app->home->rel_file("lib/$app_class/I18N/$language.pm");
     my %oldlex = ();
 
-    if ($language ne 'Skeleton' && -e $lexem_file) {
-        print "Lexem file \"$lexem_file\" already exists\n";
+    if ($language ne 'Skeleton' && -e $lexem_file ) {
+      if( $reset ){
+        print "Lexem file \"$lexem_file\" already exists ... reseting\n";
+      } elsif( $save ){
+        print "Lexem file \"$lexem_file\" already exists ... saving\n";
         require "$app_class/I18N/$language.pm";
         my $l =  '%' . $app_class . '::I18N::' . $language . '::Lexicon';
         %oldlex = eval( $l );
         %oldlex = () if( $@ );
+      } else {
+        print "Lexem file \"$lexem_file\" already exists ... stop\n";
+      }
     }
 
     my $l = MojoX::I18N::Lexemes->new(renderer => $self->renderer);
@@ -62,7 +83,7 @@ sub run {
         my $parsed_lexemes = $l->parse($t);
 
         # add to all lexemes
-        $lexicon{$_} = '' foreach (@$parsed_lexemes);
+        $lexicon{$_} =  '' foreach (grep{ !$lexicon{$_} } @$parsed_lexemes);
     }
 
     # Output lexem
@@ -84,10 +105,17 @@ use base '<%= $app_class %>::I18N';
 our %Lexicon = (
 % foreach my $lexem (keys %$lexicon) {
     % $lexem=~s/'/\\'/g;
-    % unless ($lexem=~s/\n/\\n/g) {
-    '<%= $lexem %>' => '',
+    % my $data = $lexicon->{$lexem};
+    % $data =~s/'/\\'/g;
+    % if( $data =~ s/\n/\\n/g ){
+    %   $data = '"' . $data . '"';
     % } else {
-    "<%= $lexem %>" => '',
+    %   $data = "'${data}'";
+    % }
+    % unless ($lexem=~s/\n/\\n/g) {
+    '<%= $lexem %>' => <%= $data %>,
+    % } else {
+    "<%= $lexem %>" => <%= $data %>,
     % };
 % }
 );
