@@ -7,6 +7,7 @@ use FindBin;
 use File::Copy;
 
 use Test::More tests => 4;
+use utf8;
 
 use lib "$FindBin::Bin/lib";
 
