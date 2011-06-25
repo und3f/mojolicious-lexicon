@@ -2,6 +2,7 @@ package Mojolicious::Command::Generate::Lexicon;
 
 use strict;
 use warnings;
+use utf8;
 
 use base 'Mojo::Command';
 
@@ -119,6 +120,7 @@ our %Lexicon = (
 % foreach my $lexem (keys %$lexicon) {
     % $lexem=~s/'/\\'/g;
     % my $data = $lexicon->{$lexem};
+    % utf8::encode $data;
     % $data =~s/'/\\'/g;
     % if( $data =~ s/\n/\\n/g ){
     %   $data = '"' . $data . '"';
