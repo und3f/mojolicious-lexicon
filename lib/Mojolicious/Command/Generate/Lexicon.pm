@@ -96,6 +96,12 @@ sub run {
     # Output lexem
     $self->render_to_file('package', $lexem_file, $app_class, $language,
         \%lexicon);
+
+    my $base_class = $app_class . '::I18N';
+    my $base_file = $app->home->rel_file("lib/$app_class/I18N.pm" );
+    $self->render_to_file( 'base', $base_file, $app_class )
+      unless( -e $base_file );
+
 }
 
 1;
@@ -107,7 +113,7 @@ package <%= $app_class %>::I18N::<%= $language %>;
 use base '<%= $app_class %>::I18N';
 
 # Uncoment to use non-latin symbols
-# use utf8;
+use utf8;
 
 our %Lexicon = (
 % foreach my $lexem (keys %$lexicon) {
@@ -126,6 +132,15 @@ our %Lexicon = (
     % };
 % }
 );
+
+1;
+
+
+@@ base
+% my $app_class = shift;
+# $self->plugin('i18n');
+package <%= $app_class %>::I18N;
+use base 'Locale::Maketext';
 
 1;
 __END__
