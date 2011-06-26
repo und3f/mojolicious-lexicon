@@ -117,7 +117,7 @@ use base '<%= $app_class %>::I18N';
 use utf8;
 
 our %Lexicon = (
-% foreach my $lexem (keys %$lexicon) {
+% foreach my $lexem (sort keys %$lexicon) {
     % $lexem=~s/'/\\'/g;
     % my $data = $lexicon->{$lexem};
     % utf8::encode $data;
