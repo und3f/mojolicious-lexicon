@@ -6,7 +6,7 @@ use warnings;
 use FindBin;
 use File::Copy;
 
-use Test::More tests => 6;
+use Test::More tests => 4;
 
 use lib "$FindBin::Bin/lib";
 
@@ -18,28 +18,15 @@ my $l = new_ok 'Mojolicious::Command::Generate::Lexicon';
 
 $l->quiet(1);
 
-$l->run(undef, "$FindBin::Bin/templates/test.html.ep");
-
-require_ok 'Lexemes::I18N::Skeleton';
-
-is_deeply eval(
-    'use Lexemes::I18N::Skeleton; \%Lexemes::I18N::Skeleton::Lexicon'),
-  {'lexemes' => '', "hard\ntest" => '', link_to => ''},
-  'correct lexemes';
-
-unlink "$FindBin::Bin/lib/Lexemes/I18N/Skeleton.pm";
-
-
 copy( "$FindBin::Bin/lib/Lexemes/I18N/es.pm.orig", "$FindBin::Bin/lib/Lexemes/I18N/es.pm" );
 
-$l->run('es', "$FindBin::Bin/templates/test.html.ep", '--reset');
+$l->run('es', "$FindBin::Bin/templates/test.html.ep", '--save');
 
-# require_ok 'Lexemes::I18N::es';
 require_ok( "$FindBin::Bin/lib/Lexemes/I18N/es.pm" );
 
 is_deeply eval(
     'use Lexemes::I18N::es; \%Lexemes::I18N::es::Lexicon'),
-  {'lexemes' => '', "hard\ntest" => '', link_to => ''},
+  {'lexemes' => 'lexemas', "hard\ntest" => "prueba\ndifícil", link_to => ''},
   'correct lexemes';
 
 unlink "$FindBin::Bin/lib/Lexemes/I18N/es.pm";
