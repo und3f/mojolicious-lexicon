@@ -1,4 +1,9 @@
 package Mojolicious::Command::Generate::Lexicon;
+
+use strict;
+use warnings;
+use utf8;
+
 use base 'Mojo::Command';
 
 use MojoX::I18N::Lexemes;
@@ -8,21 +13,39 @@ __PACKAGE__->attr(description => <<'EOF');
 Generate lexicon file from templates.
 EOF
 __PACKAGE__->attr(usage => <<"EOF");
-usage: $0 generate lexicon [language] [templates]
+usage: $0 generate lexicon [language] [--save] [--reset] [templates]
+Options:
+  --reset   Reset lexicon values (default values)
+  --save    Save old lexicon values
 EOF
 
 our $VERSION = 0.991;
+use Getopt::Long;
 
 sub run {
-    my ($self, $language, @templates) = @_;
+    my $self = shift;
+    my $language = shift;
 
+    my @templates;
     my $s   = Mojo::Server->new;
     my $app = $s->app;
+    my $reset;
+    my $save;
+    my $verbose;
 
     my $app_class = $s->app_class;
     $app_class =~ s!::!/!g;
 
     $language ||= 'Skeleton';
+
+    local @ARGV = @_ if @_;
+
+    my $result = GetOptions(
+            "reset!" => \$reset,
+            "save!" => \$save,
+            'verbose|v:1' => \$verbose,
+            '<>' => sub{ push  @templates, $_ if $_ }
+    );
 
     my $handler = $app->renderer->default_handler;
     unless (@templates) {
@@ -34,15 +57,26 @@ sub run {
 
 
     my $lexem_file = $app->home->rel_file("lib/$app_class/I18N/$language.pm");
+    my %oldlex = ();
 
-    if ($language ne 'Skeleton' && -e $lexem_file) {
-        print "Lexem file \"$lexem_file\" already exists\n";
+    if ($language ne 'Skeleton' && -e $lexem_file ) {
+      if( $reset ){
+        print "Lexem file \"$lexem_file\" already exists ... reseting\n";
+      } elsif( $save ){
+        print "Lexem file \"$lexem_file\" already exists ... saving\n";
+        require "$app_class/I18N/$language.pm";
+        my $l =  '%' . $app_class . '::I18N::' . $language . '::Lexicon';
+        %oldlex = eval( $l );
+        %oldlex = () if( $@ );
+      } else {
+        print "Lexem file \"$lexem_file\" already exists ... stop\n";
         return;
+      }
     }
 
     my $l = MojoX::I18N::Lexemes->new(renderer => $self->renderer);
 
-    my %lexicon = ();
+    my %lexicon = %oldlex;
 
     foreach my $file (@templates) {
         open F, $file or die "Unable to open $file: $!";
@@ -50,10 +84,14 @@ sub run {
         close F;
 
         # get lexemes
+        print "Parsing $file \n" if $verbose;
         my $parsed_lexemes = $l->parse($t);
 
         # add to all lexemes
-        $lexicon{$_} = '' foreach (@$parsed_lexemes);
+        foreach (grep{ !exists $lexicon{$_} } @$parsed_lexemes){
+          $lexicon{$_} =  '' ;
+          print "New lexeme found => $_\n" if $verbose;
+        }
     }
 
     # Output lexem
@@ -70,20 +108,29 @@ package <%= $app_class %>::I18N::<%= $language %>;
 use base '<%= $app_class %>::I18N';
 
 # Uncoment to use non-latin symbols
-# use utf8;
+use utf8;
 
 our %Lexicon = (
-% foreach my $lexem (keys %$lexicon) {
+% foreach my $lexem (sort keys %$lexicon) {
     % $lexem=~s/'/\\'/g;
-    % unless ($lexem=~s/\n/\\n/g) {
-    '<%= $lexem %>' => '',
+    % my $data = $lexicon->{$lexem};
+    % utf8::encode $data;
+    % $data =~s/'/\\'/g;
+    % if( $data =~ s/\n/\\n/g ){
+    %   $data = '"' . $data . '"';
     % } else {
-    "<%= $lexem %>" => '',
+    %   $data = "'${data}'";
+    % }
+    % unless ($lexem=~s/\n/\\n/g) {
+    '<%= $lexem %>' => <%= $data %>,
+    % } else {
+    "<%= $lexem %>" => <%= $data %>,
     % };
 % }
 );
 
 1;
+
 __END__
 
 =head1 NAME
