@@ -24,8 +24,10 @@ $l->run('es', "$FindBin::Bin/templates/test.html.ep", '--save');
 
 require_ok( "$FindBin::Bin/lib/Lexemes/I18N/es.pm" );
 
-is_deeply eval(
-    'use Lexemes::I18N::es; \%Lexemes::I18N::es::Lexicon'),
+is_deeply eval { 
+        my $l = \%{Lexemes::I18N::es::Lexicon}; 
+        \%{Lexemes::I18N::es::Lexicon}; # Mencioned again for avoid warn
+  },
   {'lexemes' => 'lexemas', "hard\ntest" => "prueba\ndifícil", link_to => ''},
   'correct lexemes';
 
