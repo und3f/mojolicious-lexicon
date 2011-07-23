@@ -44,7 +44,7 @@ sub run {
             "reset!" => \$reset,
             "save!" => \$save,
             'verbose|v:1' => \$verbose,
-            '<>' => sub{ push  @templates, $_ if $_ }
+            '<>' => sub{ push  @templates, $_[0] if $_[0] }
     );
 
     my $handler = $app->renderer->default_handler;
