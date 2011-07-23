@@ -112,8 +112,8 @@ use utf8;
 
 our %Lexicon = (
 % foreach my $lexem (sort keys %$lexicon) {
-    % $lexem=~s/'/\\'/g;
     % my $data = $lexicon->{$lexem} || '';
+    % $lexem=~s/'/\\'/g;
     % utf8::encode $data;
     % $data =~s/'/\\'/g;
     % if( $data =~ s/\n/\\n/g ){
