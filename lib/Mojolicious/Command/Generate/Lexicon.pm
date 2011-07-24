@@ -44,7 +44,7 @@ sub run {
             "reset!" => \$reset,
             "save!" => \$save,
             'verbose|v:1' => \$verbose,
-            '<>' => sub{ push  @templates, $_ if $_ }
+            '<>' => sub{ push  @templates, $_[0] if $_[0] }
     );
 
     my $handler = $app->renderer->default_handler;
@@ -112,8 +112,8 @@ use utf8;
 
 our %Lexicon = (
 % foreach my $lexem (sort keys %$lexicon) {
+    % my $data = $lexicon->{$lexem} || '';
     % $lexem=~s/'/\\'/g;
-    % my $data = $lexicon->{$lexem};
     % utf8::encode $data;
     % $data =~s/'/\\'/g;
     % if( $data =~ s/\n/\\n/g ){
