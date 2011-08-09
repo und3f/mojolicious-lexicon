@@ -1,3 +1,4 @@
 Test <%==l 'lexemes' %>
 Very <%=l 'hard
 test' %>.
+%= link_to( l( 'link_to' ) )

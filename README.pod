@@ -6,7 +6,7 @@ lexicon file.
 
 =head2 Usage example
 
-./script/my_mojolicious_app generate lexicon
+./script/my_mojolicious_app generate lexicon [--save] [--reset]
 
 =head2 COPYRIGHT
 
