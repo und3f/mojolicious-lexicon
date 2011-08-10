@@ -6,12 +6,17 @@ use utf8;
 
 use base 'Mojo::Command';
 
-use MojoX::I18N::Lexemes;
+our $VERSION = 0.991;
+
 use File::Find;
+use Getopt::Long;
+
+use MojoX::I18N::Lexemes;
 
 __PACKAGE__->attr(description => <<'EOF');
 Generate lexicon file from templates.
 EOF
+
 __PACKAGE__->attr(usage => <<"EOF");
 usage: $0 generate lexicon [language] [--save] [--reset] [templates]
 Options:
@@ -19,59 +24,68 @@ Options:
   --save    Save old lexicon values
 EOF
 
-our $VERSION = 0.991;
-use Getopt::Long;
-
 sub run {
-    my $self = shift;
+    my $self     = shift;
     my $language = shift;
 
     my @templates;
     my $s   = Mojo::Server->new;
     my $app = $s->app;
+
     my $reset;
     my $save;
     my $verbose;
 
     my $app_class = $s->app_class;
-    $app_class =~ s!::!/!g;
+    $app_class =~ s{::}{/}g;
 
     $language ||= 'Skeleton';
 
     local @ARGV = @_ if @_;
 
     my $result = GetOptions(
-            "reset!" => \$reset,
-            "save!" => \$save,
-            'verbose|v:1' => \$verbose,
-            '<>' => sub{ push  @templates, $_[0] if $_[0] }
+        "reset!"      => \$reset,
+        "save!"       => \$save,
+        'verbose|v:1' => \$verbose,
+        '<>'          => sub { push @templates, $_[0] if $_[0] }
     );
 
     my $handler = $app->renderer->default_handler;
+
+    # Find all templates of project
     unless (@templates) {
-        # Find all templates of project
-        find(sub {
-            push @templates, $File::Find::name if (/\.$handler/);
-        }, $app->renderer->root);
+        find(
+            sub {
+                push @templates, $File::Find::name if (/\.$handler/);
+            },
+            $app->renderer->root
+        );
     }
 
-
     my $lexem_file = $app->home->rel_file("lib/$app_class/I18N/$language.pm");
-    my %oldlex = ();
+    my %oldlex     = ();
 
-    if ($language ne 'Skeleton' && -e $lexem_file ) {
-      if( $reset ){
-        print "Lexem file \"$lexem_file\" already exists ... reseting\n";
-      } elsif( $save ){
-        print "Lexem file \"$lexem_file\" already exists ... saving\n";
-        require "$app_class/I18N/$language.pm";
-        my $l =  '%' . $app_class . '::I18N::' . $language . '::Lexicon';
-        %oldlex = eval( $l );
-        %oldlex = () if( $@ );
-      } else {
-        print "Lexem file \"$lexem_file\" already exists ... stop\n";
-        return;
-      }
+    if ($language ne 'Skeleton' && -e $lexem_file) {
+        print qq{Lexem file "$lexem_file" already exists... }
+          if $verbose;
+
+        if ($save) {
+            print "saving\n" if $verbose;
+
+            %oldlex = eval {
+                require "$app_class/I18N/$language.pm";
+                no strict 'refs';
+                %{*{"${app_class}::I18N::${language}::Lexicon"}};
+            };
+            %oldlex = () if ($@);
+        }
+        elsif ($reset) {
+            print "reseting\n" if $verbose;
+        }
+        else {
+            print "stop\n" if $verbose;
+            return;
+        }
     }
 
     my $l = MojoX::I18N::Lexemes->new(renderer => $self->renderer);
@@ -88,9 +102,9 @@ sub run {
         my $parsed_lexemes = $l->parse($t);
 
         # add to all lexemes
-        foreach (grep{ !exists $lexicon{$_} } @$parsed_lexemes){
-          $lexicon{$_} =  '' ;
-          print "New lexeme found => $_\n" if $verbose;
+        foreach (grep { !exists $lexicon{$_} } @$parsed_lexemes) {
+            $lexicon{$_} = '';
+            print "New lexeme found => $_\n" if $verbose;
         }
     }
 
