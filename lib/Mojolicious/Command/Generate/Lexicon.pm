@@ -189,6 +189,8 @@ In alphabetical order
 
 Silvio
 
+=back
+
 =head1 COPYRIGHT
 
 Copyright (C) 2011, Sergey Zasenko
