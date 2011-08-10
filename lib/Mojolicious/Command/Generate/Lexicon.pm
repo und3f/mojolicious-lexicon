@@ -120,8 +120,6 @@ __DATA__
 % my ($app_class, $language, $lexicon) = @_;
 package <%= $app_class %>::I18N::<%= $language %>;
 use base '<%= $app_class %>::I18N';
-
-# Uncoment to use non-latin symbols
 use utf8;
 
 our %Lexicon = (
