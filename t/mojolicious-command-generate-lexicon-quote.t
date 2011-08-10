@@ -2,6 +2,7 @@
 
 use strict;
 use warnings;
+no warnings 'once';
 
 use FindBin;
 use File::Copy;
@@ -22,9 +23,6 @@ $l->run(undef, "$FindBin::Bin/templates/test-quote.html.ep");
 
 require_ok "$FindBin::Bin/lib/Lexemes/I18N/Skeleton.pm";
 
-# Avoid "used only once" warning
-my %t = %Lexemes::I18N::Skeleton::Lexicon;
-
 is_deeply \%Lexemes::I18N::Skeleton::Lexicon, {'Can\'t fix' => ''},
   'correct lexemes';
 
@@ -39,9 +37,6 @@ copy(
 $l->run('es', "$FindBin::Bin/templates/test-quote.html.ep", '--save');
 
 require_ok "$FindBin::Bin/lib/Lexemes/I18N/es.pm";
-
-# Avoid "used only once" warning
-%t = %Lexemes::I18N::es::Lexicon;
 
 is_deeply \%Lexemes::I18N::es::Lexicon,
   { 'lexemes'    => 'lexemas',
