@@ -20,25 +20,31 @@ $l->quiet(1);
 
 $l->run(undef, "$FindBin::Bin/templates/test.html.ep");
 
-require_ok 'Lexemes::I18N::Skeleton';
+require_ok "$FindBin::Bin/lib/Lexemes/I18N/Skeleton.pm";
 
-is_deeply eval(
-    'use Lexemes::I18N::Skeleton; \%Lexemes::I18N::Skeleton::Lexicon'),
+# Avoid "used only once" warning
+my %t = %Lexemes::I18N::Skeleton::Lexicon;
+
+is_deeply \%Lexemes::I18N::Skeleton::Lexicon,
   {'lexemes' => '', "hard\ntest" => '', link_to => ''},
   'correct lexemes';
 
 unlink "$FindBin::Bin/lib/Lexemes/I18N/Skeleton.pm";
 
 
-copy( "$FindBin::Bin/lib/Lexemes/I18N/es.pm.orig", "$FindBin::Bin/lib/Lexemes/I18N/es.pm" );
+copy(
+    "$FindBin::Bin/lib/Lexemes/I18N/es.pm.orig",
+    "$FindBin::Bin/lib/Lexemes/I18N/es.pm"
+);
 
 $l->run('es', "$FindBin::Bin/templates/test.html.ep", '--reset');
 
-require_ok( "$FindBin::Bin/lib/Lexemes/I18N/es.pm" );
+require_ok "$FindBin::Bin/lib/Lexemes/I18N/es.pm";
 
-is_deeply eval(
-    'use Lexemes::I18N::es; \%Lexemes::I18N::es::Lexicon'),
-  {'lexemes' => '', "hard\ntest" => '', link_to => ''},
-  'correct lexemes';
+# Avoid "used only once" warning
+%t = %Lexemes::I18N::es::Lexicon;
+
+is_deeply \%Lexemes::I18N::es::Lexicon,
+  {'lexemes' => '', "hard\ntest" => '', link_to => ''}, 'correct lexemes';
 
 unlink "$FindBin::Bin/lib/Lexemes/I18N/es.pm";
