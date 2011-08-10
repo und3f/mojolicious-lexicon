@@ -8,8 +8,6 @@ use base 'Mojo::Base';
 use Mojo::Template;
 use Mojo::Server;
 
-our $VERSION = 0.92;
-
 __PACKAGE__->attr(renderer  => sub { Mojo::Template->new });
 __PACKAGE__->attr(helper    => sub {'l'});
 __PACKAGE__->attr(helper_re => sub {qr/l\s*(\([^\)]+\))/});

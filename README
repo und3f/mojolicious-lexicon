@@ -1,0 +1,45 @@
+NAME
+    Mojolicious::Command::Generate::Lexicon - Generate Lexicon Command
+
+SYNOPSIS
+        $ ./script/my_mojolicious_app generate lexicon [--save] [--reset]
+
+    Or as perl module
+
+        use Mojolicious::Command::Generate::Lexicon;
+
+        my $l = Mojolicious::Command::Generate::Lexicon->new;
+        $inflate->run($language, @files);
+
+SEE ALSO
+    MojoX::I18N::Lexemes
+
+SUPPORT
+  IRC
+        #ru.pm on irc.perl.org
+
+DEVELOPMENT
+  Repository
+        http://github.com/und3f/mojolicious-lexicon
+
+AUTHOR
+    Sergey Zasenko, "undef@cpan.org".
+
+CREDITS
+    In alphabetical order
+
+      Silvio
+
+COPYRIGHT
+    Copyright (C) 2011, Sergey Zasenko
+
+    This program is free software, you can redistribute it and/or modify it
+    under the terms of the Artistic License version 2.0.
+
+POD ERRORS
+    Hey! The above document had some coding errors, which are explained
+    below:
+
+    Around line 194:
+        You forgot a '=back' before '=head1'
+

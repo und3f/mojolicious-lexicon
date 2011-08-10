@@ -1,3 +1,9 @@
+0.992 2011-08-10 00:00:00
+        - fixed saving lexemes with single quotes (Silvio)
+        - save and reset options (Silvio)
+        - better lexemes grubbing (Silvio)
+        - use utf8 by default (Silvio)
+
 0.991 2011-01-30 00:00:00
         - Fixed work with Mojolicious 1.0.
         - Fixed typos.

@@ -6,7 +6,7 @@ use utf8;
 
 use base 'Mojo::Command';
 
-our $VERSION = 0.991;
+our $VERSION = 0.992;
 
 use File::Find;
 use Getopt::Long;
@@ -153,7 +153,7 @@ Mojolicious::Command::Generate::Lexicon - Generate Lexicon Command
 
 =head1 SYNOPSIS
 
-    $ ./script/my_mojolicious_app generate lexicon
+    $ ./script/my_mojolicious_app generate lexicon [--save] [--reset]
 
 Or as perl module
 
@@ -182,6 +182,14 @@ L<MojoX::I18N::Lexemes>
 =head1 AUTHOR
 
 Sergey Zasenko, C<undef@cpan.org>.
+
+=head1 CREDITS
+
+In alphabetical order
+
+=over 2
+
+Silvio
 
 =head1 COPYRIGHT
 
