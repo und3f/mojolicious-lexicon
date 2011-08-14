@@ -2,7 +2,8 @@ NAME
     Mojolicious::Command::Generate::Lexicon - Generate Lexicon Command
 
 SYNOPSIS
-        $ ./script/my_mojolicious_app generate lexicon [--save] [--reset]
+        $ ./script/my_mojolicious_app generate lexicon [language]
+            [--behavior=save||reset] [templates]
 
     Or as perl module
 

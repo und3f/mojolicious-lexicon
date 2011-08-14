@@ -18,10 +18,12 @@ Generate lexicon file from templates.
 EOF
 
 __PACKAGE__->attr(usage => <<"EOF");
-usage: $0 generate lexicon [language] [--save] [--reset] [templates]
+usage: $0 generate lexicon [language] [--behavior=save||reset] [templates]
 Options:
-  --reset   Reset lexicon values (default values)
-  --save    Save old lexicon values
+  -b, --behavior=BEHAVIOR
+        Determine how to work with existent lexems, possible values:
+            save    save old lexicon values;
+            reset   delete old lexicon.
 EOF
 
 sub run {
@@ -32,8 +34,6 @@ sub run {
     my $s   = Mojo::Server->new;
     my $app = $s->app;
 
-    my $reset;
-    my $save;
     my $verbose;
 
     my $app_class = $s->app_class;
@@ -41,13 +41,14 @@ sub run {
 
     $language ||= 'Skeleton';
 
+    my $behavior = '';
+
     local @ARGV = @_ if @_;
 
     my $result = GetOptions(
-        "reset!"      => \$reset,
-        "save!"       => \$save,
-        'verbose|v:1' => \$verbose,
-        '<>'          => sub { push @templates, $_[0] if $_[0] }
+        "behavior|b:s{1,1}" => \$behavior,
+        'verbose|v:1'        => \$verbose,
+        '<>'                 => sub { push @templates, $_[0] if $_[0] }
     );
 
     my $handler = $app->renderer->default_handler;
@@ -66,12 +67,7 @@ sub run {
     my %oldlex     = ();
 
     if ($language ne 'Skeleton' && -e $lexem_file) {
-        print qq{Lexem file "$lexem_file" already exists... }
-          if $verbose;
-
-        if ($save) {
-            print "saving\n" if $verbose;
-
+        if (lc $behavior eq 'save') {
             %oldlex = eval {
                 require "$app_class/I18N/$language.pm";
                 no strict 'refs';
@@ -79,11 +75,14 @@ sub run {
             };
             %oldlex = () if ($@);
         }
-        elsif ($reset) {
-            print "reseting\n" if $verbose;
+        elsif (lc $behavior eq 'reset') {
+            # Just proceed
         }
         else {
-            print "stop\n" if $verbose;
+            print <<USAGE;
+Lexemes already exists.
+You must set `--behavior' to one of "reset" or "save".
+USAGE
             return;
         }
     }
@@ -151,7 +150,8 @@ Mojolicious::Command::Generate::Lexicon - Generate Lexicon Command
 
 =head1 SYNOPSIS
 
-    $ ./script/my_mojolicious_app generate lexicon [--save] [--reset]
+    $ ./script/my_mojolicious_app generate lexicon [language]
+        [--behavior=save||reset] [templates]
 
 Or as perl module
 

@@ -20,7 +20,7 @@ $l->quiet(1);
 
 copy( "$FindBin::Bin/lib/Lexemes/I18N/es.pm.orig", "$FindBin::Bin/lib/Lexemes/I18N/es.pm" );
 
-$l->run('es', "$FindBin::Bin/templates/test.html.ep", '--save');
+$l->run('es', "$FindBin::Bin/templates/test.html.ep", '-b=save');
 
 require_ok( "$FindBin::Bin/lib/Lexemes/I18N/es.pm" );
 

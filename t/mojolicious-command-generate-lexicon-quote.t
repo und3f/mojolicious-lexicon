@@ -34,7 +34,7 @@ copy(
     "$FindBin::Bin/lib/Lexemes/I18N/es.pm"
 );
 
-$l->run('es', "$FindBin::Bin/templates/test-quote.html.ep", '--save');
+$l->run('es', "$FindBin::Bin/templates/test-quote.html.ep", '-b=save');
 
 require_ok "$FindBin::Bin/lib/Lexemes/I18N/es.pm";
 
