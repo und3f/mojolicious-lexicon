@@ -1,3 +1,6 @@
+0.9921 2011-08-17 00:00:00
+        - version bump to fix reindex problem
+    
 0.992 2011-08-10 00:00:00
         - fixed saving lexemes with single quotes (Silvio)
         - save and reset options (Silvio)
