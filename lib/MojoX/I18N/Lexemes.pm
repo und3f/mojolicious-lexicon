@@ -5,6 +5,8 @@ use warnings;
 
 use base 'Mojo::Base';
 
+our $VERSION = 0.992_2;
+
 use Mojo::Template;
 use Mojo::Server;
 

@@ -6,7 +6,7 @@ use utf8;
 
 use base 'Mojo::Command';
 
-our $VERSION = 0.992_1;
+our $VERSION = 0.992_2;
 
 use File::Find;
 use Getopt::Long;
