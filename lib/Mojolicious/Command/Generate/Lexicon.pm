@@ -52,11 +52,6 @@ sub run {
 
     local @ARGV = @_ if @_;
 
-
-    for my $template(@templates){
-        warn($template);
-    }
-
     my $result = GetOptions(
         "behavior|b:s{1,1}" => \$behavior,
         'verbose|v:1'        => \$verbose,
@@ -71,7 +66,7 @@ sub run {
             sub {
                 push @templates, $File::Find::name if (/\.$handler/);
             },
-            $app->renderer->paths
+            @{$app->renderer->paths}
         );
     }
 
@@ -81,9 +76,9 @@ sub run {
     if ($language ne 'Skeleton' && -e $lexem_file) {
         if (lc $behavior eq 'save') {
             %oldlex = eval {
-                require "$app_class/I18N/$language.pm";
+                require "$app_klass/I18N/$language.pm";
                 no strict 'refs';
-                %{*{"${app_class}::I18N::${language}::Lexicon"}};
+                %{*{"${app_klass}::I18N::${language}::Lexicon"}};
             };
             %oldlex = () if ($@);
         }
@@ -113,7 +108,7 @@ USAGE
         my $parsed_lexemes = $l->parse($t);
 
         # add to all lexemes
-        foreach (grep { !exists $lexicon{$_} } @$parsed_lexemes) {
+        foreach (grep { !exists $lexicon{$_} } @{$parsed_lexemes}) {
             $lexicon{$_} = '';
             print "New lexeme found => $_\n" if $verbose;
         }

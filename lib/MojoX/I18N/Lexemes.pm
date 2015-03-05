@@ -28,6 +28,9 @@ sub parse {
         for (my $j = 0; $j < @{$line}; $j += 2) {
             my $type  = $line->[$j];
             my $value = $line->[$j + 1];
+            if ($value){
+                $value =~ s/^\s*//;
+            }
 
             if ($multiline) {
                 if ($type eq 'expr' || $type eq 'escp' || $type eq 'line') {
@@ -41,7 +44,8 @@ sub parse {
                 && $value
                 && substr($value, 0, length($self->helper) + 1) eq
                 $self->helper . ' ')
-            {
+                {
+
                 $args = substr $value, length($self->helper) + 1;
 
                 unless (($line->[$j + 2] || '') eq 'text') {
