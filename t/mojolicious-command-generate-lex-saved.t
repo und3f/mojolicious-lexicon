@@ -10,13 +10,12 @@ use Test::More tests => 4;
 
 use lib "$FindBin::Bin/lib";
 
-$ENV{MOJO_APP} = 'Lexemes';
+use_ok 'Mojolicious::Command::generate::lexicon';
 
-use_ok 'Mojolicious::Command::Generate::Lexicon';
-
-my $l = new_ok 'Mojolicious::Command::Generate::Lexicon';
+my $l = new_ok 'Mojolicious::Command::generate::lexicon';
 
 $l->quiet(1);
+$l->app(sub { Mojo::Server->new->build_app('Lexemes') });
 
 copy( "$FindBin::Bin/lib/Lexemes/I18N/es.pm.orig", "$FindBin::Bin/lib/Lexemes/I18N/es.pm" );
 

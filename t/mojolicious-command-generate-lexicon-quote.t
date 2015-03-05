@@ -11,13 +11,12 @@ use Test::More tests => 6;
 
 use lib "$FindBin::Bin/lib";
 
-$ENV{MOJO_APP} = 'Lexemes';
+use_ok 'Mojolicious::Command::generate::lexicon';
 
-use_ok 'Mojolicious::Command::Generate::Lexicon';
-
-my $l = new_ok 'Mojolicious::Command::Generate::Lexicon';
+my $l = new_ok 'Mojolicious::Command::generate::lexicon';
 
 $l->quiet(1);
+$l->app(sub { Mojo::Server->new->build_app('Lexemes') });
 
 $l->run(undef, "$FindBin::Bin/templates/test-quote.html.ep");
 

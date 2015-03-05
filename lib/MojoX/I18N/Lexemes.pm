@@ -30,7 +30,7 @@ sub parse {
             my $value = $line->[$j + 1];
 
             if ($multiline) {
-                if ($type eq 'expr' || $type eq 'escp') {
+                if ($type eq 'expr' || $type eq 'escp' || $type eq 'line') {
                     $args .= $value;
                 }
                 else {

@@ -1,10 +1,11 @@
-package Mojolicious::Command::Generate::Lexicon;
+package Mojolicious::Command::generate::lexicon;
 
 use strict;
 use warnings;
 use utf8;
 
-use base 'Mojo::Command';
+#base 'Mojo::Command';
+use Mojo::Base 'Mojolicious::Command';
 
 our $VERSION = 0.992_2;
 
@@ -31,12 +32,11 @@ sub run {
     my $language = shift;
 
     my @templates;
-    my $s   = Mojo::Server->new;
-    my $app = $s->app;
+    my $app = $self->app->();
 
     my $verbose;
-
-    my $app_class = $s->app_class;
+    
+    my $app_class = ref $app;
     $app_class =~ s{::}{/}g;
 
     $language ||= 'Skeleton';
@@ -87,7 +87,7 @@ USAGE
         }
     }
 
-    my $l = MojoX::I18N::Lexemes->new(renderer => $self->renderer);
+    my $l = MojoX::I18N::Lexemes->new();
 
     my %lexicon = %oldlex;
 
