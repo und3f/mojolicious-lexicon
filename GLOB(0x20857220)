@@ -1,0 +1,4 @@
+cp lib/Mojolicious/Command/generate/lexicon.pm blib/lib/Mojolicious/Command/generate/lexicon.pm
+Skip blib/lib/MojoX/I18N/Lexemes.pm (unchanged)
+Manifying blib/man3/MojoX.I18N.Lexemes.3pm
+Manifying blib/man3/Mojolicious.Command.generate.lexicon.3pm

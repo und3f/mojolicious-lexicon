@@ -32,10 +32,17 @@ sub run {
     my $language = shift;
 
     my @templates;
-    my $app = $self->app->();
+    my $app;
+    if (ref $self->app eq 'CODE'){
+        $app = $self->app->();
+    }
+    else{
+        $app = $self->app;
+    }
 
     my $verbose;
     
+    my $app_klass = ref $app;
     my $app_class = ref $app;
     $app_class =~ s{::}{/}g;
 
@@ -45,11 +52,16 @@ sub run {
 
     local @ARGV = @_ if @_;
 
+
+    for my $template(@templates){
+        warn($template);
+    }
+
     my $result = GetOptions(
         "behavior|b:s{1,1}" => \$behavior,
         'verbose|v:1'        => \$verbose,
-        '<>'                 => sub { push @templates, $_[0] if $_[0] }
     );
+    push @templates, $_[0] if (defined $_[0]);
 
     my $handler = $app->renderer->default_handler;
 
@@ -59,7 +71,7 @@ sub run {
             sub {
                 push @templates, $File::Find::name if (/\.$handler/);
             },
-            $app->renderer->root
+            $app->renderer->paths
         );
     }
 
@@ -108,7 +120,7 @@ USAGE
     }
 
     # Output lexem
-    $self->render_to_file('package', $lexem_file, $app_class, $language,
+    $self->render_to_file('package', $lexem_file, $app_klass, $language,
         \%lexicon);
 }
 
