@@ -27,7 +27,7 @@ sub parse {
     foreach my $line (@{$mt->tree}) {
         for (my $j = 0; $j < @{$line}; $j += 2) {
             my $type  = $line->[$j];
-            my $value = $line->[$j + 1];
+            my $value = $line->[$j + 1] || '';
             if ($value){
                 $value =~ s/^\s*//;
             }
