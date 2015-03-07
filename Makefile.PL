@@ -7,14 +7,22 @@ use warnings;
 
 use ExtUtils::MakeMaker;
 
+my $meta_merge = {
+    META_MERGE => {
+        resources => {
+            repository => 'http://github.com/und3f/mojoliciousx-lexicon',
+        },
+    }
+};
+
 WriteMakefile(
-    NAME         => 'mojolicious-lexicon',
+    NAME         => 'Mojolicious::Command::generate::lexicon',
     VERSION_FROM => 'lib/Mojolicious/Command/generate/lexicon.pm',
     AUTHOR       => 'Sergey Zasenko <undef@cpan.org>',
     PREREQ_PM    => {
         'File::Find'   => 0,
         'Getopt::Long' => 0,
-        'Mojolicious'  => '1.0',
+        'Mojolicious'  => '6.0',
     },
     test => {TESTS => 't/*.t t/*/*.t t/*/*/*.t'}
 );

@@ -5,7 +5,7 @@ use warnings;
 
 use base 'Mojo::Base';
 
-our $VERSION = 0.992_2;
+our $VERSION = 0.993;
 
 use Mojo::Template;
 use Mojo::Server;
@@ -122,12 +122,6 @@ implements the following ones.
 
 Parses template and returns arrayref of found lexemes.
 
-=head1 SUPPORT
-
-=head2 IRC
-
-    #ru.pm on irc.perl.org
-    
 =head1 DEVELOPMENT
 
 =head2 Repository
@@ -140,7 +134,7 @@ Sergey Zasenko, C<undef@cpan.org>.
 
 =head1 COPYRIGHT
 
-Copyright (C) 2011, Sergey Zasenko
+Copyright (C) 2015, Sergey Zasenko
 
 This program is free software, you can redistribute it and/or modify it
 under the terms of the Artistic License version 2.0.

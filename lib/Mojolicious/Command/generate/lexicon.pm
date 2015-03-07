@@ -7,7 +7,7 @@ use utf8;
 #base 'Mojo::Command';
 use Mojo::Base 'Mojolicious::Command';
 
-our $VERSION = 0.992_2;
+our $VERSION = 0.993;
 
 use File::Find;
 use Getopt::Long;
@@ -172,12 +172,6 @@ Or as perl module
 
 L<MojoX::I18N::Lexemes>
 
-=head1 SUPPORT
-
-=head2 IRC
-
-    #ru.pm on irc.perl.org
-    
 =head1 DEVELOPMENT
 
 =head2 Repository
@@ -196,11 +190,13 @@ In alphabetical order
 
 Silvio
 
+Tetsuya Tatsumi
+
 =back
 
 =head1 COPYRIGHT
 
-Copyright (C) 2011, Sergey Zasenko
+Copyright (C) 2015, Sergey Zasenko
 
 This program is free software, you can redistribute it and/or modify it
 under the terms of the Artistic License version 2.0.
