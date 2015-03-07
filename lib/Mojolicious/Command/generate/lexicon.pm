@@ -1,10 +1,11 @@
-package Mojolicious::Command::Generate::Lexicon;
+package Mojolicious::Command::generate::lexicon;
 
 use strict;
 use warnings;
 use utf8;
 
-use base 'Mojo::Command';
+#base 'Mojo::Command';
+use Mojo::Base 'Mojolicious::Command';
 
 our $VERSION = 0.992_2;
 
@@ -31,12 +32,18 @@ sub run {
     my $language = shift;
 
     my @templates;
-    my $s   = Mojo::Server->new;
-    my $app = $s->app;
+    my $app;
+    if (ref $self->app eq 'CODE'){
+        $app = $self->app->();
+    }
+    else{
+        $app = $self->app;
+    }
 
     my $verbose;
-
-    my $app_class = $s->app_class;
+    
+    my $app_klass = ref $app;
+    my $app_class = ref $app;
     $app_class =~ s{::}{/}g;
 
     $language ||= 'Skeleton';
@@ -48,8 +55,8 @@ sub run {
     my $result = GetOptions(
         "behavior|b:s{1,1}" => \$behavior,
         'verbose|v:1'        => \$verbose,
-        '<>'                 => sub { push @templates, $_[0] if $_[0] }
     );
+    push @templates, $_[0] if (defined $_[0]);
 
     my $handler = $app->renderer->default_handler;
 
@@ -59,7 +66,7 @@ sub run {
             sub {
                 push @templates, $File::Find::name if (/\.$handler/);
             },
-            $app->renderer->root
+            @{$app->renderer->paths}
         );
     }
 
@@ -69,9 +76,9 @@ sub run {
     if ($language ne 'Skeleton' && -e $lexem_file) {
         if (lc $behavior eq 'save') {
             %oldlex = eval {
-                require "$app_class/I18N/$language.pm";
+                require "$app_klass/I18N/$language.pm";
                 no strict 'refs';
-                %{*{"${app_class}::I18N::${language}::Lexicon"}};
+                %{*{"${app_klass}::I18N::${language}::Lexicon"}};
             };
             %oldlex = () if ($@);
         }
@@ -87,7 +94,7 @@ USAGE
         }
     }
 
-    my $l = MojoX::I18N::Lexemes->new(renderer => $self->renderer);
+    my $l = MojoX::I18N::Lexemes->new();
 
     my %lexicon = %oldlex;
 
@@ -101,14 +108,14 @@ USAGE
         my $parsed_lexemes = $l->parse($t);
 
         # add to all lexemes
-        foreach (grep { !exists $lexicon{$_} } @$parsed_lexemes) {
+        foreach (grep { !exists $lexicon{$_} } @{$parsed_lexemes}) {
             $lexicon{$_} = '';
             print "New lexeme found => $_\n" if $verbose;
         }
     }
 
     # Output lexem
-    $self->render_to_file('package', $lexem_file, $app_class, $language,
+    $self->render_to_file('package', $lexem_file, $app_klass, $language,
         \%lexicon);
 }
 
