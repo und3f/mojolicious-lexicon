@@ -7,7 +7,7 @@ use utf8;
 #base 'Mojo::Command';
 use Mojo::Base 'Mojolicious::Command';
 
-our $VERSION = 0.993;
+our $VERSION = 0.993_1;
 
 use File::Find;
 use Getopt::Long;
@@ -153,7 +153,7 @@ __END__
 
 =head1 NAME
 
-Mojolicious::Command::Generate::Lexicon - Generate Lexicon Command
+Mojolicious::Command::generate::lexicon - Generate Lexicon Command
 
 =head1 SYNOPSIS
 
@@ -162,9 +162,9 @@ Mojolicious::Command::Generate::Lexicon - Generate Lexicon Command
 
 Or as perl module
 
-    use Mojolicious::Command::Generate::Lexicon;
+    use Mojolicious::Command::generate::lexicon;
 
-    my $l = Mojolicious::Command::Generate::Lexicon->new;
+    my $l = Mojolicious::Command::generate::lexicon->new;
     $inflate->run($language, @files);
 
 
