@@ -7,7 +7,7 @@ use utf8;
 #base 'Mojo::Command';
 use Mojo::Base 'Mojolicious::Command';
 
-our $VERSION = 0.993_1;
+our $VERSION = 0.994;
 
 use File::Find;
 use Getopt::Long;
