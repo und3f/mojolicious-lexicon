@@ -22,8 +22,12 @@ $l->run(undef, "$FindBin::Bin/templates/test.html.ep");
 
 require_ok "$FindBin::Bin/lib/Lexemes/I18N/Skeleton.pm";
 
-is_deeply \%Lexemes::I18N::Skeleton::Lexicon,
-  {'lexemes' => '', "hard\ntest" => '', link_to => ''},
+is_deeply \%Lexemes::I18N::Skeleton::Lexicon, {
+    'lexemes'             => '',
+    "hard\ntest"          => '',
+    link_to               => '',
+    'variables test [_1]' => ''
+  },
   'correct lexemes';
 
 unlink "$FindBin::Bin/lib/Lexemes/I18N/Skeleton.pm";
@@ -38,7 +42,12 @@ $l->run('es', "$FindBin::Bin/templates/test.html.ep", '-b=reset');
 
 require_ok "$FindBin::Bin/lib/Lexemes/I18N/es.pm";
 
-is_deeply \%Lexemes::I18N::es::Lexicon,
-  {'lexemes' => '', "hard\ntest" => '', link_to => ''}, 'correct lexemes';
+is_deeply \%Lexemes::I18N::es::Lexicon, {
+    'lexemes'             => '',
+    "hard\ntest"          => '',
+    link_to               => '',
+    'variables test [_1]' => ''
+  },
+  'correct lexemes';
 
 unlink "$FindBin::Bin/lib/Lexemes/I18N/es.pm";

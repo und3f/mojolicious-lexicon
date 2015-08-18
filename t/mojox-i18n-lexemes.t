@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 
 BEGIN {use_ok 'MojoX::I18N::Lexemes'};
 
@@ -42,3 +42,9 @@ is_deeply
     $l->parse(q|Can you <%==translate 'this' %>?|),
     ['this'],
     'other helper name';
+$l->helper('l');
+
+is_deeply 
+    $l->parse(q|Complex <%==l 'text [_1] [_2]', 'with', 'variables'%>|),
+    ['text [_1] [_2]'],
+    'with arguments';
