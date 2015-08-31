@@ -4,4 +4,4 @@
 ^Makefile$
 ^\.git
 MYMETA.*
-README
+README.pod

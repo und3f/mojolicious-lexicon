@@ -4,10 +4,9 @@ use strict;
 use warnings;
 use utf8;
 
-#base 'Mojo::Command';
 use Mojo::Base 'Mojolicious::Command';
 
-our $VERSION = 0.994;
+our $VERSION = 0.995;
 
 use File::Find;
 use Getopt::Long;
