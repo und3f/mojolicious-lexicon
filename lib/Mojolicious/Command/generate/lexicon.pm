@@ -56,7 +56,7 @@ sub run {
         "behavior|b:s{1,1}" => \$behavior,
         'verbose|v:1'        => \$verbose,
     );
-    push @templates, $_[0] if (defined $_[0]);
+    push @templates, $ARGV[0] if (defined $ARGV[0]);
 
     my $handler = $app->renderer->default_handler;
 
@@ -76,7 +76,7 @@ sub run {
     if ($language ne 'Skeleton' && -e $lexem_file) {
         if (lc $behavior eq 'save') {
             %oldlex = eval {
-                require "$app_klass/I18N/$language.pm";
+                require "$app_class/I18N/$language.pm";
                 no strict 'refs';
                 %{*{"${app_klass}::I18N::${language}::Lexicon"}};
             };
