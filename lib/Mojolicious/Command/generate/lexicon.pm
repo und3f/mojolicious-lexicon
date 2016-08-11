@@ -73,25 +73,30 @@ sub run {
     my $lexem_file = $app->home->rel_file("lib/$app_class/I18N/$language.pm");
     my %oldlex     = ();
 
-    if ($language ne 'Skeleton' && -e $lexem_file) {
-        if (lc $behavior eq 'save') {
-            %oldlex = eval {
-                require "$app_class/I18N/$language.pm";
-                no strict 'refs';
-                %{*{"${app_klass}::I18N::${language}::Lexicon"}};
-            };
-            %oldlex = () if ($@);
-        }
-        elsif (lc $behavior eq 'reset') {
-            # Just proceed
-        }
-        else {
-            print <<USAGE;
+    if (-e $lexem_file) {
+        if ($language ne 'Skeleton') {
+            if (lc $behavior eq 'save') {
+                %oldlex = eval {
+                    require "$app_class/I18N/$language.pm";
+                    no strict 'refs';
+                    %{*{"${app_klass}::I18N::${language}::Lexicon"}};
+                };
+                %oldlex = () if ($@);
+            }
+            elsif (lc $behavior eq 'reset') {
+                # Just proceed
+            }
+            else {
+                print <<USAGE;
 Lexemes already exists.
 You must set `--behavior' to one of "reset" or "save".
 USAGE
-            return;
+                return;
+            }
         }
+
+        print "  [delete] $lexem_file\n" unless $self->quiet;
+        unlink $lexem_file;
     }
 
     my $l = MojoX::I18N::Lexemes->new();
@@ -130,11 +135,10 @@ use utf8;
 
 our %Lexicon = (
 % foreach my $lexem (sort keys %$lexicon) {
-    % $lexem = String::Escape::qqbackslash($lexem);
+    % my $lexem_esc = String::Escape::qqbackslash($lexem);
     % my $data = $lexicon->{$lexem} || '';
-    % utf8::encode $data;
     % $data  = String::Escape::qqbackslash($data);
-    <%= $lexem %> => <%= $data %>,
+    <%= $lexem_esc %> => <%= $data %>,
 % }
 );
 
