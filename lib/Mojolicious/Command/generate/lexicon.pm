@@ -5,6 +5,7 @@ use warnings;
 use utf8;
 
 use Mojo::Base 'Mojolicious::Command';
+use String::Escape qw(qqbackslash);
 
 our $VERSION = 0.995;
 
@@ -129,20 +130,11 @@ use utf8;
 
 our %Lexicon = (
 % foreach my $lexem (sort keys %$lexicon) {
+    % $lexem = String::Escape::qqbackslash($lexem);
     % my $data = $lexicon->{$lexem} || '';
-    % $lexem=~s/'/\\'/g;
     % utf8::encode $data;
-    % $data =~s/'/\\'/g;
-    % if( $data =~ s/\n/\\n/g ){
-    %   $data = '"' . $data . '"';
-    % } else {
-    %   $data = "'${data}'";
-    % }
-    % unless ($lexem=~s/\n/\\n/g) {
-    '<%= $lexem %>' => <%= $data %>,
-    % } else {
-    "<%= $lexem %>" => <%= $data %>,
-    % };
+    % $data  = String::Escape::qqbackslash($data);
+    <%= $lexem %> => <%= $data %>,
 % }
 );
 

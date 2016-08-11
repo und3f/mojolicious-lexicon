@@ -20,9 +20,10 @@ WriteMakefile(
     VERSION_FROM => 'lib/Mojolicious/Command/generate/lexicon.pm',
     AUTHOR       => 'Sergey Zasenko <undef@cpan.org>',
     PREREQ_PM    => {
-        'File::Find'   => 0,
-        'Getopt::Long' => 0,
-        'Mojolicious'  => '6.0',
+        'File::Find'     => 0,
+        'Getopt::Long'   => 0,
+        'Mojolicious'    => '6.0',
+        'String::Escape' => 0,
     },
     test => {TESTS => 't/*.t t/*/*.t t/*/*/*.t'}
 );
