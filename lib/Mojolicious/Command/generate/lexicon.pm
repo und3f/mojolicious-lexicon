@@ -7,7 +7,7 @@ use utf8;
 use Mojo::Base 'Mojolicious::Command';
 use String::Escape qw(qqbackslash);
 
-our $VERSION = 0.995;
+our $VERSION = 0.996;
 
 use File::Find;
 use Getopt::Long;

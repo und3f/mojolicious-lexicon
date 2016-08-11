@@ -1,3 +1,7 @@
+0.996  2016-08-11 00:00:00
+        - escape strings with String::Escape
+        - fixed work with the latest Mojolicious
+
 0.995  2015-08-31 00:00:00
         - fixed --behavior option (dokechin)
 
