@@ -14,7 +14,6 @@ use_ok 'Mojolicious::Command::generate::lexicon';
 
 my $l = new_ok 'Mojolicious::Command::generate::lexicon';
 
-$l->quiet(1);
 $l->app(sub { Mojo::Server->new->build_app('Lexemes') });
 
 copy( "$FindBin::Bin/lib/Lexemes/I18N/es.pm.orig", "$FindBin::Bin/lib/Lexemes/I18N/es.pm" );
