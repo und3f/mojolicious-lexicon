@@ -25,5 +25,12 @@ WriteMakefile(
         'Mojolicious'    => '6.0',
         'String::Escape' => 0,
     },
-    test => {TESTS => 't/*.t t/*/*.t t/*/*/*.t'}
+    TEST_REQUIRES => {
+        'Cwd'        => 0,
+        'File::Temp' => 0,
+        'File::Copy' => 0,
+        'Test::More' => 0,
+        'FindBin'    => 0,
+    },
+    test => { TESTS => 't/*.t t/*/*.t t/*/*/*.t' }
 );

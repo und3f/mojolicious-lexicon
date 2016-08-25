@@ -4,23 +4,23 @@ use strict;
 use warnings;
 
 use FindBin;
-use File::Copy;
 
 use Test::More tests => 4;
 
 use lib "$FindBin::Bin/lib";
+use TestEnv;
+my $te = TestEnv->new;
 
 use_ok 'Mojolicious::Command::generate::lexicon';
 
+$te->setup_i18n_tempdir(qw(es orig));
 my $l = new_ok 'Mojolicious::Command::generate::lexicon';
 
 $l->app(sub { Mojo::Server->new->build_app('Lexemes') });
 
-copy( "$FindBin::Bin/lib/Lexemes/I18N/es.pm.orig", "$FindBin::Bin/lib/Lexemes/I18N/es.pm" );
+$l->run('es', $te->i18n_tempdir . "/templates/test.html.ep", '-b=save', '--verbose');
 
-$l->run('es', "$FindBin::Bin/templates/test.html.ep", '-b=save');
-
-require_ok( "$FindBin::Bin/lib/Lexemes/I18N/es.pm" );
+require_ok( $te->i18n_tempdir . "/lib/Lexemes/I18N/es.pm" );
 
 is_deeply eval {
     my $l = \%{Lexemes::I18N::es::Lexicon};
@@ -32,5 +32,3 @@ is_deeply eval {
     'variables test [_1]' => ''
   },
   'correct lexemes';
-
-unlink "$FindBin::Bin/lib/Lexemes/I18N/es.pm";

@@ -5,21 +5,23 @@ use warnings;
 no warnings 'once';
 
 use FindBin;
-use File::Copy;
 
 use Test::More tests => 6;
 
 use lib "$FindBin::Bin/lib";
+use TestEnv;
+my $te = TestEnv->new;
 
 use_ok 'Mojolicious::Command::generate::lexicon';
 
+$te->setup_i18n_tempdir();
 my $l = new_ok 'Mojolicious::Command::generate::lexicon';
 
 $l->app(sub { Mojo::Server->new->build_app('Lexemes') });
 
-$l->run(undef, "$FindBin::Bin/templates/test.html.ep");
+$l->run(undef, $te->i18n_tempdir . "/templates/test.html.ep");
 
-require_ok "$FindBin::Bin/lib/Lexemes/I18N/Skeleton.pm";
+require_ok $te->i18n_tempdir . "/lib/Lexemes/I18N/Skeleton.pm";
 
 is_deeply \%Lexemes::I18N::Skeleton::Lexicon, {
     'lexemes'             => '',
@@ -29,17 +31,10 @@ is_deeply \%Lexemes::I18N::Skeleton::Lexicon, {
   },
   'correct lexemes';
 
-unlink "$FindBin::Bin/lib/Lexemes/I18N/Skeleton.pm";
+$te->setup_i18n_tempdir(qw(es orig));
+$l->run('es', $te->i18n_tempdir . "/templates/test.html.ep", '-b=reset');
 
-
-copy(
-    "$FindBin::Bin/lib/Lexemes/I18N/es.pm.orig",
-    "$FindBin::Bin/lib/Lexemes/I18N/es.pm"
-);
-
-$l->run('es', "$FindBin::Bin/templates/test.html.ep", '-b=reset');
-
-require_ok "$FindBin::Bin/lib/Lexemes/I18N/es.pm";
+require_ok $te->i18n_tempdir . "/lib/Lexemes/I18N/es.pm";
 
 is_deeply \%Lexemes::I18N::es::Lexicon, {
     'lexemes'             => '',
@@ -48,5 +43,3 @@ is_deeply \%Lexemes::I18N::es::Lexicon, {
     'variables test [_1]' => ''
   },
   'correct lexemes';
-
-unlink "$FindBin::Bin/lib/Lexemes/I18N/es.pm";

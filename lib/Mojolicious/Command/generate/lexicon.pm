@@ -77,7 +77,8 @@ sub run {
         if ($language ne 'Skeleton') {
             if (lc $behavior eq 'save') {
                 %oldlex = eval {
-                    require "$app_class/I18N/$language.pm";
+                    local %INC = %INC;
+                    require $app->home->rel_file("lib/$app_class/I18N/$language.pm");
                     no strict 'refs';
                     %{*{"${app_klass}::I18N::${language}::Lexicon"}};
                 };

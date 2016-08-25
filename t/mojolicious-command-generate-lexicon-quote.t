@@ -5,36 +5,33 @@ use warnings;
 no warnings 'once';
 
 use FindBin;
-use File::Copy;
 
 use Test::More tests => 6;
 
 use lib "$FindBin::Bin/lib";
+use TestEnv;
+my $te = TestEnv->new;
 
+$te->setup_i18n_tempdir();
 use_ok 'Mojolicious::Command::generate::lexicon';
 
 my $l = new_ok 'Mojolicious::Command::generate::lexicon';
 
 $l->app(sub { Mojo::Server->new->build_app('Lexemes') });
 
-$l->run(undef, "$FindBin::Bin/templates/test-quote.html.ep");
+$l->run(undef, $te->i18n_tempdir . "/templates/test-quote.html.ep");
 
-require_ok "$FindBin::Bin/lib/Lexemes/I18N/Skeleton.pm";
+require_ok $te->i18n_tempdir . "/lib/Lexemes/I18N/Skeleton.pm";
 
 is_deeply \%Lexemes::I18N::Skeleton::Lexicon, {'Can\'t fix' => ''},
   'correct lexemes';
 
-unlink "$FindBin::Bin/lib/Lexemes/I18N/Skeleton.pm";
-
 # Save option test
-copy(
-    "$FindBin::Bin/lib/Lexemes/I18N/es.pm.quote",
-    "$FindBin::Bin/lib/Lexemes/I18N/es.pm"
-);
+$te->setup_i18n_tempdir(qw(es quote));
 
-$l->run('es', "$FindBin::Bin/templates/test-quote.html.ep", '-b=save');
+$l->run('es', $te->i18n_tempdir . "/templates/test-quote.html.ep", '-b=save');
 
-require_ok "$FindBin::Bin/lib/Lexemes/I18N/es.pm";
+require_ok $te->i18n_tempdir . "/lib/Lexemes/I18N/es.pm";
 
 is_deeply \%Lexemes::I18N::es::Lexicon,
   { 'lexemes'    => 'lexemas',
@@ -42,5 +39,3 @@ is_deeply \%Lexemes::I18N::es::Lexicon,
     'Can\'t fix' => 'No puede arreglarse'
   },
   'correct lexemes';
-
-unlink "$FindBin::Bin/lib/Lexemes/I18N/es.pm";
