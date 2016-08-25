@@ -7,7 +7,7 @@ use utf8;
 use Mojo::Base 'Mojolicious::Command';
 use String::Escape qw(qqbackslash);
 
-our $VERSION = 0.996;
+our $VERSION = 0.997;
 
 use File::Find;
 use Getopt::Long;
@@ -192,7 +192,7 @@ Tetsuya Tatsumi
 
 =head1 COPYRIGHT
 
-Copyright (C) 2015, Sergey Zasenko
+Copyright (C) 2011-2016, Sergey Zasenko
 
 This program is free software, you can redistribute it and/or modify it
 under the terms of the Artistic License version 2.0.

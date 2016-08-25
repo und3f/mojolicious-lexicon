@@ -1,3 +1,6 @@
+0.997  2016-08-25 00:00:00
+        - tests reworked for multithreading
+
 0.996  2016-08-11 00:00:00
         - escape strings with String::Escape
         - fixed work with the latest Mojolicious
