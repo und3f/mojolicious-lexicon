@@ -12,9 +12,9 @@ Mojolicious::Command::generate::lexicon - Generate Lexicon Command
 
 Options:
   -b, --behavior=BEHAVIOR
-        Determine how to work with existent lexems, possible values:
-            save    save old lexicon values;
-            reset   delete old lexicon.
+        Determines how to treat existing lexemes:
+            save    save old lexicon values
+            reset   delete old lexicon
 
 =head1 SYNOPSIS API
 
