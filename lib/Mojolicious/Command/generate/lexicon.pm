@@ -14,11 +14,9 @@ use Getopt::Long;
 
 use MojoX::I18N::Lexemes;
 
-__PACKAGE__->attr(description => <<'EOF');
-Generate lexicon file from templates.
-EOF
+has "description" => "Generate lexicon file from templates.";
 
-__PACKAGE__->attr(usage => <<"EOF");
+has "usage" => <<'EOF';
 usage: $0 generate lexicon [language] [--behavior=save||reset] [templates]
 Options:
   -b, --behavior=BEHAVIOR
