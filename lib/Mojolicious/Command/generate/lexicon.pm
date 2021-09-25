@@ -7,7 +7,7 @@ use utf8;
 use Mojo::Base 'Mojolicious::Command';
 use String::Escape qw(qqbackslash);
 
-our $VERSION = 0.997;
+our $VERSION = 0.998;
 
 use File::Find;
 use Getopt::Long;
@@ -33,15 +33,15 @@ sub run {
 
     my @templates;
     my $app;
-    if (ref $self->app eq 'CODE'){
+    if (ref $self->app eq 'CODE') {
         $app = $self->app->();
     }
-    else{
+    else {
         $app = $self->app;
     }
 
     my $verbose;
-    
+
     my $app_klass = ref $app;
     my $app_class = ref $app;
     $app_class =~ s{::}{/}g;
@@ -54,7 +54,7 @@ sub run {
 
     my $result = GetOptions(
         "behavior|b:s{1,1}" => \$behavior,
-        'verbose|v:1'        => \$verbose,
+        'verbose|v:1'       => \$verbose,
     );
     push @templates, $ARGV[0] if (defined $ARGV[0]);
 
@@ -70,21 +70,25 @@ sub run {
         );
     }
 
-    my $lexem_file = $app->home->rel_file("lib/$app_class/I18N/$language.pm");
-    my %oldlex     = ();
+    my $lexem_file =
+      $app->home->rel_file("lib/$app_class/I18N/$language.pm")->to_abs()
+      ->to_string();
+    my %oldlex = ();
 
     if (-e $lexem_file) {
         if ($language ne 'Skeleton') {
             if (lc $behavior eq 'save') {
                 %oldlex = eval {
                     local %INC = %INC;
-                    require $app->home->rel_file("lib/$app_class/I18N/$language.pm");
+                    require $app->home->rel_file(
+                        "lib/$app_class/I18N/$language.pm");
                     no strict 'refs';
                     %{*{"${app_klass}::I18N::${language}::Lexicon"}};
                 };
                 %oldlex = () if ($@);
             }
             elsif (lc $behavior eq 'reset') {
+
                 # Just proceed
             }
             else {
@@ -121,15 +125,20 @@ USAGE
     }
 
     # Output lexem
-    $self->render_to_file('package', $lexem_file, $app_klass, $language,
-        \%lexicon);
+    $self->render_to_file(
+        'package',
+        $lexem_file, {
+            app_class => $app_klass,
+            language  => $language,
+            lexicon   => \%lexicon
+        }
+    );
 }
 
 1;
 
 __DATA__
 @@ package
-% my ($app_class, $language, $lexicon) = @_;
 package <%= $app_class %>::I18N::<%= $language %>;
 use base '<%= $app_class %>::I18N';
 use utf8;
@@ -192,7 +201,7 @@ Tetsuya Tatsumi
 
 =head1 COPYRIGHT
 
-Copyright (C) 2011-2016, Sergey Zasenko
+Copyright (C) 2011-2021, Sergey Zasenko
 
 This program is free software, you can redistribute it and/or modify it
 under the terms of the Artistic License version 2.0.
