@@ -16,14 +16,7 @@ use MojoX::I18N::Lexemes;
 
 has "description" => "Generate lexicon file from templates.";
 
-has "usage" => <<'EOF';
-usage: $0 generate lexicon [language] [--behavior=save||reset] [templates]
-Options:
-  -b, --behavior=BEHAVIOR
-        Determine how to work with existent lexems, possible values:
-            save    save old lexicon values;
-            reset   delete old lexicon.
-EOF
+has "usage" => sub{shift->extract_usage};
 
 sub run {
     my $self     = shift;
@@ -160,16 +153,31 @@ Mojolicious::Command::generate::lexicon - Generate Lexicon Command
 
 =head1 SYNOPSIS
 
-    $ ./script/my_mojolicious_app generate lexicon [language]
-        [--behavior=save||reset] [templates]
+    Usage: APPLICATION generate lexicon [LANGUAGE [OPTIONS [TEMPLATES]]]
 
-Or as perl module
+    ./script/my_app generate lexicon
+
+    ./script/my_app generate lexicon es -b save
+
+Options:
+  -b, --behavior=BEHAVIOR
+        Determines how to treat existing lexemes:
+            save    save old lexicon values
+            reset   delete old lexicon
+
+=head1 SYNOPSIS API
 
     use Mojolicious::Command::generate::lexicon;
 
     my $l = Mojolicious::Command::generate::lexicon->new;
-    $inflate->run($language, @files);
+    $l->run($language, @files);
 
+=head1 DESCRIPTION
+
+L<Mojolicious::Command::generate::lexicon> generates lexicon files from
+existing templates. During template parsing it searches for calls of C<l>, e.g.
+C<E<lt>%==l "Hello, world" %E<gt>>. All lexicons are written to
+C<lib/MyApp/I18N/E<lt>LANGUAGEE<gt>.pm> files.
 
 =head1 SEE ALSO
 
@@ -183,7 +191,7 @@ L<MojoX::I18N::Lexemes>
 
 =head1 AUTHOR
 
-Sergey Zasenko, C<undef@cpan.org>.
+Serhii Zasenko, C<undef@cpan.org>.
 
 =head1 CREDITS
 
@@ -199,7 +207,7 @@ Tetsuya Tatsumi
 
 =head1 COPYRIGHT
 
-Copyright (C) 2011-2021, Sergey Zasenko
+Copyright (C) 2011-2021, Serhii Zasenko
 
 This program is free software, you can redistribute it and/or modify it
 under the terms of the Artistic License version 2.0.
